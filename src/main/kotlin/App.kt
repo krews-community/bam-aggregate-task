@@ -12,7 +12,7 @@ fun main(args: Array<String>) = Cli().main(args)
 
 class Cli : CliktCommand() {
 
-    private val regionFiles by option("--region-files", help = "paths to region files in BED 6+ format")
+    private val regionFiles by option("--region-file", help = "paths to region files in BED 6+ format")
         .path(exists = true).multiple()
     private val alignments by option("--alignments", help = "path to alignments in BAM format")
         .path(exists = true).required()
