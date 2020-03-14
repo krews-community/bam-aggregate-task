@@ -24,7 +24,7 @@ java -jar build/*.jar \
     --outputDir output
 ```
 
-This will produce an output file at `output/input1_input.json` containing a vector of aggregated read counts in JSON format.
+This will produce an output file at `output/input1_input.aggregate.json` containing a vector of aggregated read counts in JSON format.
 The above example uses a custom width of +/- 2000 basepairs around each peak summit, rather than the default +/- 1000.
 
 # Contributors

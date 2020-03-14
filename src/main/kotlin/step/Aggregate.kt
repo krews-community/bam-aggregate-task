@@ -3,6 +3,10 @@ package step
 import util.*
 import java.nio.file.Path
 import htsjdk.samtools.*
+import mu.KotlinLogging
+import kotlin.math.roundToInt
+
+private val log = KotlinLogging.logger {}
 
 /**
  * Aggregates alignments over a sequence of genomic regions.
@@ -16,7 +20,8 @@ fun aggregate(regions: List<Region>, alignments: Path): List<Int> {
 
     SamReaderFactory.make().validationStringency(ValidationStringency.SILENT).open(alignments.toFile()).use {
 
-        regions.forEach { region ->
+        regions.forEachIndexed { i, region ->
+
             it.query(region.chromosome, region.start, region.end, false).use { q ->
                 q.forEach { alignment ->
                     val start = pileUpStart(alignment)
@@ -26,6 +31,11 @@ fun aggregate(regions: List<Region>, alignments: Path): List<Int> {
                     }
                 }
             }
+
+            if (i % 10000 == 0) log.info {
+                "aggregating region $i of ${regions.size} (${(i.toFloat() / regions.size * 100).roundToInt()}%)"
+            }
+
         }
 
     }

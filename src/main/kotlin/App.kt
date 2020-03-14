@@ -37,16 +37,10 @@ class Cli : CliktCommand() {
  */
 fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path) {
 
-    log.info {
-        """
-            Running alignment aggregation for:
-            BED files: $regionFiles
-            BAM file: $alignments
-            expansionSize: $expansionSize
-        """.trimIndent()
-    }
-
     regionFiles.forEach {
+
+        log.info { "Running alignment aggregation for $it" }
+
         readBed6File(it) { regions ->
             val combinedOutPrefix = "${it.fileName.toString().split(".").first()}_${alignments.fileName.toString().split(".").first()}"
             writeJSONArray(
@@ -54,8 +48,7 @@ fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outpu
                 outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX")
             )
         }
-    }
 
-    log.info { "Done" }
+    }
 
 }
