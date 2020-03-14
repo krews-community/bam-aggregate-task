@@ -32,7 +32,7 @@ fun aggregate(regions: List<Region>, alignments: Path): List<Int> {
                 }
             }
 
-            if (i % 10000 == 0) log.info {
+            if (i % 1000 == 0) log.info {
                 "aggregating region $i of ${regions.size} (${(i.toFloat() / regions.size * 100).roundToInt()}%)"
             }
 
