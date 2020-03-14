@@ -11,7 +11,7 @@ class AggregateTests {
             Region("chr1", 100, 101, "", 0, '+')
         )
         val values = aggregate(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(0, 0))
+        assertThat(values).isEqualTo(listOf(0.0F, 0.0F))
     }
 
     @Test
@@ -20,7 +20,7 @@ class AggregateTests {
             Region("chr22", 100, 101, "", 0, '+')
         )
         val values = aggregate(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(0, 0))
+        assertThat(values).isEqualTo(listOf(0.0F, 0.0F))
     }
 
     @Test
@@ -30,7 +30,7 @@ class AggregateTests {
             Region("chr22", 10667451, 10667452, "", 0, '+')
         )
         val values = aggregate(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(2, 0))
+        assertThat(values).isEqualTo(listOf(1.0F, 0.0F))
     }
 
     @Test
@@ -40,7 +40,7 @@ class AggregateTests {
             Region("chr22", 10667451, 10667452, "", 0, '+')
         )
         val values = aggregate(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(1, 1))
+        assertThat(values).isEqualTo(listOf(0.5F, 0.5F))
     }
 
 }

@@ -14,7 +14,7 @@ private val log = KotlinLogging.logger {}
  * @param regions the regions to aggregate.
  * @param alignments path to BAM file from which to read the alignments.
  */
-fun aggregate(regions: List<Region>, alignments: Path): List<Int> {
+fun aggregate(regions: List<Region>, alignments: Path): List<Float> {
 
     val values: MutableList<Int> = (regions.first().start..regions.first().end).map { 0 }.toMutableList()
 
@@ -40,6 +40,6 @@ fun aggregate(regions: List<Region>, alignments: Path): List<Int> {
 
     }
 
-    return values
+    return values.map { it.toFloat() / regions.size }
 
 }
