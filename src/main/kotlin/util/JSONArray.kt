@@ -6,6 +6,6 @@ import java.nio.file.Path
 fun writeJSONArray(values: List<Int>, path: Path) {
     Files.createDirectories(path.parent)
     Files.newBufferedWriter(path).use { writer ->
-        writer.write("[${values.joinToString { "," }}]\n")
+        writer.write("[${values.joinToString(",")}]\n")
     }
 }
