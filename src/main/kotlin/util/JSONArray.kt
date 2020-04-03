@@ -13,6 +13,6 @@ fun writeJSONArray(values: List<Float>, path: Path) {
 fun writeJSONMatrix(values: List<List<Int>>, path: Path) {
     Files.createDirectories(path.parent)
     Files.newBufferedWriter(path).use { writer ->
-        writer.write("[${values.joinToString(",") { it.joinToString(",")} }]\n")
+        writer.write("[${values.joinToString(",") { "[${it.joinToString(",")}]" } }]\n")
     }
 }
