@@ -10,7 +10,6 @@ private val log = KotlinLogging.logger {}
 
 /**
  * Aggregates alignments over a sequence of genomic regions.
- *
  * @param regions the regions to aggregate.
  * @param alignments path to BAM file from which to read the alignments.
  */
