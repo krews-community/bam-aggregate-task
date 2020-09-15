@@ -25,7 +25,9 @@ fun aggregate(regions: List<Region>, alignments: Path, strandedReads: Boolean, g
     val reverseResults: MutableMap<String, MutableList<Int>> = mutableMapOf()
     val counts: MutableMap<String, Int> = mutableMapOf()
 
-    SamReaderFactory.make().validationStringency(ValidationStringency.SILENT).open(alignments.toFile()).use {
+    SamReaderFactory.makeDefault().validationStringency(ValidationStringency.SILENT).enable(SamReaderFactory.Option.INCLUDE_SOURCE_IN_RECORDS).open(alignments.toFile()).use {
+
+        if (SamFiles.findIndex(alignments) == null) log.info { "indexing" }
 
         if (SamFiles.findIndex(alignments) == null)
             BAMIndexer.createIndex(it, alignments.resolveSibling("${alignments.fileName}.bai"))
