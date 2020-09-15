@@ -27,6 +27,9 @@ fun aggregate(regions: List<Region>, alignments: Path, strandedReads: Boolean, g
 
     SamReaderFactory.make().validationStringency(ValidationStringency.SILENT).open(alignments.toFile()).use {
 
+        if (SamFiles.findIndex(alignments) == null)
+            BAMIndexer.createIndex(it, alignments.resolveSibling("${alignments.fileName}.bai"))
+
         regions.forEachIndexed { i, region ->
 
             val name = if (grouped) region.name else ""
