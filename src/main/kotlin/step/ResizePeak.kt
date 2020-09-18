@@ -17,6 +17,5 @@ fun resizeRegion(region: Region, halfSize: Int): Region {
  * @param regions the regions to resize.
  * @param halfSize half the fixed width to which each region should be resized.
  */
-fun resizeRegions(regions: List<Region>, halfSize: Int): List<Region> {
-    return regions.map { resizeRegion(it, halfSize) }
-}
+fun resizeRegions(regions: List<Region>, halfSize: Int): List<Region>
+    = regions.map { resizeRegion(it, halfSize) }

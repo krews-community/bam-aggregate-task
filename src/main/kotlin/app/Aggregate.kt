@@ -28,9 +28,13 @@ class Aggregate : CliktCommand() {
         .int().default(2000)
     private val outputDir by option("--output-dir", help = "path to write output")
         .path().required()
+    private val forwardShift by option("--forward-shift", help = "if set, shifts forward strand reads by the given number of basepairs")
+        .int().default(0)
+    private val reverseShift by option("--reverse-shift", help = "if set, shifts reverse strand reads by the given number of basepairs")
+        .int().default(0)
 
     override fun run() {
-        runTask(regionFiles, alignments, expansionSize, outputDir, strandedReads, grouped)
+        runTask(regionFiles, alignments, expansionSize, outputDir, strandedReads, grouped, forwardShift, reverseShift)
     }
 
 }
@@ -43,7 +47,10 @@ class Aggregate : CliktCommand() {
  * @param expansionSize number of basepairs by which to expand each region around its center
  * @param outputDir path to directory for writing output files
  */
-private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, strandedReads: Boolean, grouped: Boolean) {
+private fun runTask(
+    regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, strandedReads: Boolean, grouped: Boolean,
+    forwardShift: Int = 0, reverseShift: Int = 0
+) {
 
     regionFiles.forEach {
 
@@ -52,7 +59,7 @@ private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: In
         readBed6File(it) { regions ->
             val combinedOutPrefix = "${it.fileName.toString().split(".").first()}_${alignments.fileName.toString().split(".").first()}"
             writeJSONArray(
-                aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped),
+                aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped, forwardShift, reverseShift),
                 outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
                 grouped
             )

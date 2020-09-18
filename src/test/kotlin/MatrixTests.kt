@@ -30,7 +30,7 @@ class MatrixTests {
             Region("chr22", 10667451, 10667452, "", 0, '+')
         )
         val values = matrix(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(listOf(1, 0), listOf(1, 0)))
+        assertThat(values).isEqualTo(listOf(listOf(1, 0), listOf(0, 0)))
     }
 
     @Test
@@ -40,7 +40,7 @@ class MatrixTests {
             Region("chr22", 10667451, 10667452, "", 0, '+')
         )
         val values = matrix(regions, TEST_BAM_PATH)
-        assertThat(values).isEqualTo(listOf(listOf(0, 1), listOf(1, 0)))
+        assertThat(values).isEqualTo(listOf(listOf(0, 1), listOf(0, 0)))
     }
 
 }
