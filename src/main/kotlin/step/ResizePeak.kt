@@ -8,7 +8,7 @@ import util.*
  * @param halfSize half the fixed width to which the region should be resized.
  */
 fun resizeRegion(region: Region, halfSize: Int): Region {
-    val midpoint: Int = (region.start + region.end) / 2
+    val midpoint: Int = ((region.start + region.end) / 2) + (if (region.strand == '-') 1 else 0)
     return region.copy(start = midpoint - halfSize, end = midpoint + halfSize)
 }
 
