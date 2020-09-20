@@ -7,6 +7,7 @@ import step.resizeRegions
 import util.AGGREGATE_TSV_SUFFIX
 import util.readBed6File
 import util.writeJSONArray
+import util.writeArray
 import java.nio.file.Path
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.int
@@ -32,9 +33,10 @@ class Aggregate : CliktCommand() {
         .int().default(0)
     private val reverseShift by option("--reverse-shift", help = "if set, shifts reverse strand reads by the given number of basepairs")
         .int().default(0)
+    private val tsvOutput by option("--output-as-tsv", help = "if set, output is printed in TSV rather than JSON format").flag()
 
     override fun run() {
-        runTask(regionFiles, alignments, expansionSize, outputDir, strandedReads, grouped, forwardShift, reverseShift)
+        runTask(regionFiles, alignments, expansionSize, outputDir, strandedReads, grouped, forwardShift, reverseShift, tsvOutput)
     }
 
 }
@@ -49,7 +51,7 @@ class Aggregate : CliktCommand() {
  */
 private fun runTask(
     regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, strandedReads: Boolean, grouped: Boolean,
-    forwardShift: Int = 0, reverseShift: Int = 0
+    forwardShift: Int = 0, reverseShift: Int = 0, tsvOutput: Boolean = false
 ) {
 
     regionFiles.forEach {
@@ -58,11 +60,18 @@ private fun runTask(
 
         readBed6File(it) { regions ->
             val combinedOutPrefix = "${it.fileName.toString().split(".").first()}_${alignments.fileName.toString().split(".").first()}"
-            writeJSONArray(
-                aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped, forwardShift, reverseShift),
-                outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
-                grouped
-            )
+            if (!tsvOutput)
+                writeJSONArray(
+                    aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped, forwardShift, reverseShift),
+                    outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
+                    grouped
+                )
+            else
+                writeArray(
+                    aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped, forwardShift, reverseShift),
+                    outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
+                    grouped
+                )
         }
 
     }

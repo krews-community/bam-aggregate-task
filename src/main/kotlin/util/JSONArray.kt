@@ -25,6 +25,26 @@ fun writeJSONArray(values: Map<String, StrandedAggregatedReads>, path: Path, gro
     }
 }
 
+fun writeArray(values: Map<String, StrandedAggregatedReads>, path: Path, grouped: Boolean) {
+    Files.createDirectories(path.parent)
+    Files.newBufferedWriter(path).use { writer ->
+        if (grouped)
+            writer.write(values.keys.joinToString("\n") { 
+                val v = values.get(it)!!
+                if (v.reverse !== null)
+                    "$it\t${v.forward.joinToString(",")}\t${v.reverse.joinToString(",")}"
+                else
+                    "$it\t${v.forward.joinToString(",")}"
+            })
+        else if (values.get("") !== null) {
+            if (values.get("")!!.reverse !== null)
+                writer.write("all\t${values.get("")!!.forward.joinToString(",")}\t${values.get("")!!.reverse!!.joinToString(",")}")
+            else
+                writer.write("all\t${values.get("")!!.forward.joinToString(",")}")
+        }
+    }
+}
+
 fun writeJSONMatrix(values: List<List<Int>>, path: Path) {
     Files.createDirectories(path.parent)
     Files.newBufferedWriter(path).use { writer ->
