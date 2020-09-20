@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import mu.KotlinLogging
 import step.aggregate
 import step.resizeRegions
+import util.AGGREGATE_JSON_SUFFIX
 import util.AGGREGATE_TSV_SUFFIX
 import util.readBed6File
 import util.writeJSONArray
@@ -63,7 +64,7 @@ private fun runTask(
             if (!tsvOutput)
                 writeJSONArray(
                     aggregate(resizeRegions(regions, expansionSize / 2), alignments, strandedReads, grouped, forwardShift, reverseShift),
-                    outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
+                    outputDir.resolve("$combinedOutPrefix$AGGREGATE_JSON_SUFFIX"),
                     grouped
                 )
             else
