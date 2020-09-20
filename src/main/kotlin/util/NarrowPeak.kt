@@ -29,8 +29,9 @@ fun readBed6File(file: Path, lineRange: IntRange? = null, processRegions: (List<
                 if (lineRange != null && !lineRange.contains(index)) return@filterIndexed false
                 true
             }
-            .map { line ->
+            .mapNotNull { line ->
                 val lineParts = line.trim().split("\t")
+                if (lineParts.size < 6) return@mapNotNull null
                 Region(
                     chromosome = lineParts[0],
                     start = lineParts[1].toInt(),
