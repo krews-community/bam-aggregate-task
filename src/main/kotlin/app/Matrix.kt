@@ -29,9 +29,13 @@ class Matrix : CliktCommand() {
         .flag()
     private val batchSize by option("--batch-size", help = "if passed, gets reads for regions in batches of this size")
         .int().default(10000)
+    private val forwardShift by option("--forward-shift", help = "if set, shifts forward strand reads by the given number of basepairs")
+        .int().default(0)
+    private val reverseShift by option("--reverse-shift", help = "if set, shifts reverse strand reads by the given number of basepairs")
+        .int().default(0)
 
     override fun run() {
-        runTask(regionFiles, alignments, expansionSize, outputDir, randomAccess, batchSize)
+        runTask(regionFiles, alignments, expansionSize, outputDir, randomAccess, batchSize, forwardShift, reverseShift)
     }
 
 }
@@ -44,7 +48,7 @@ class Matrix : CliktCommand() {
  * @param expansionSize number of basepairs by which to expand each region around its center
  * @param outputDir path to directory for writing output files
  */
-private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, randomAccess: Boolean, batchSize: Int) {
+private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, randomAccess: Boolean, batchSize: Int, forwardShift: Int, reverseShift: Int) {
 
     regionFiles.forEach {
 
@@ -54,12 +58,12 @@ private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: In
             val combinedOutPrefix = "${it.fileName.toString().split(".").first()}_${alignments.fileName.toString().split(".").first()}"
             if (randomAccess)
                 randomAccessMatrix(
-                    resizeRegions(regions, expansionSize / 2), alignments, outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"),
+                    resizeRegions(regions, expansionSize / 2), alignments, outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX"), forwardShift, reverseShift,
                     batchSize
                 )
             else
                 writeJSONMatrix(
-                    matrix(resizeRegions(regions, expansionSize / 2), alignments),
+                    matrix(resizeRegions(regions, expansionSize / 2), alignments, forwardShift, reverseShift),
                     outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX")
                 )
         }

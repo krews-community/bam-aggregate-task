@@ -57,4 +57,15 @@ class MatrixTests {
         assertThat(File(tf.toString()).readText()).isEqualTo("[13,13]\n[[0,0],[0,1]]\n[[0,0],[0,0]]\n")
     }
 
+    @Test
+    fun `Run aggregation and write a random access matrix with a shift`() {
+        val regions = listOf(
+            Region("chr22", 10602488,10602489, "", 0, '-'),
+            Region("chr22", 10667451, 10667452, "", 0, '+')
+        )
+        val tf = Files.createTempFile("t", "t")
+        randomAccessMatrix(regions, TEST_BAM_PATH, tf, 1, 0)
+        assertThat(File(tf.toString()).readText()).isEqualTo("[13,13]\n[[0,0],[1,0]]\n[[0,0],[0,0]]\n")
+    }
+
 }
