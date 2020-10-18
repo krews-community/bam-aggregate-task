@@ -24,6 +24,11 @@ fun matrix(regions: List<Region>, alignments: Path, forwardShift: Int = 0, rever
     }
     val queryExtension = max(abs(forwardShift), abs(reverseShift)) + 1
 
+    SamReaderFactory.makeDefault().validationStringency(ValidationStringency.SILENT).enable(SamReaderFactory.Option.INCLUDE_SOURCE_IN_RECORDS).open(alignments.toFile()).use {
+        if (SamFiles.findIndex(alignments) == null)
+            BAMIndexer.createIndex(it, alignments.resolveSibling("${alignments.fileName}.bai"))
+    }
+
     SamReaderFactory.make().validationStringency(ValidationStringency.SILENT).open(alignments.toFile()).use {
 
         regions.forEachIndexed { i, region ->
