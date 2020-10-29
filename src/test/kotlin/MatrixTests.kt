@@ -54,7 +54,7 @@ class MatrixTests {
         )
         val tf = Files.createTempFile("t", "t")
         randomAccessMatrix(regions, TEST_BAM_PATH, tf)
-        assertThat(File(tf.toString()).readText()).isEqualTo("[13,13]\n[[0,0],[0,1]]\n[[0,0],[0,0]]\n")
+        assertThat(File(tf.toString()).readText()).isEqualTo("[14,14]\n[[0,0],[0,1]]\n[[0,0],[0,0]]\n")
     }
 
     @Test
@@ -65,7 +65,18 @@ class MatrixTests {
         )
         val tf = Files.createTempFile("t", "t")
         randomAccessMatrix(regions, TEST_BAM_PATH, tf, 1, 0)
-        assertThat(File(tf.toString()).readText()).isEqualTo("[13,13]\n[[0,0],[1,0]]\n[[0,0],[0,0]]\n")
+        assertThat(File(tf.toString()).readText()).isEqualTo("[14,14]\n[[0,0],[1,0]]\n[[0,0],[0,0]]\n")
+    }
+
+    @Test
+    fun `Run aggregation and write a random access matrix with a shift and a small batch size`() {
+        val regions = listOf(
+            Region("chr22", 10602488,10602489, "", 0, '-'),
+            Region("chr22", 10667451, 10667452, "", 0, '+')
+        )
+        val tf = Files.createTempFile("t", "t")
+        randomAccessMatrix(regions, TEST_BAM_PATH, tf, 1, 0, batchSize = 1)
+        assertThat(File(tf.toString()).readText()).isEqualTo("[14,14]\n[[0,0],[1,0]]\n[[0,0],[0,0]]\n")
     }
 
 }

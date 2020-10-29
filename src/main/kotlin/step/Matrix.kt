@@ -69,8 +69,8 @@ fun randomAccessMatrix(regions: List<Region>, alignments: Path, outputFile: Path
         lengths = batches.flatMap {
             val forwardLines = matrix(it, alignments, forwardShift, reverseShift, "forward").map { "[${it.joinToString(",")}]" }
             val reverseLines = matrix(it, alignments, forwardShift, reverseShift, "reverse").map { "[${it.joinToString(",")}]" }
-            val lines = forwardLines.mapIndexed { i, line -> "[${line},${reverseLines[i]}]" }
-            tfw.write(lines.joinToString("\n"))
+            val lines = forwardLines.mapIndexed { i, line -> "[${line},${reverseLines[i]}]\n" }
+            tfw.write(lines.joinToString(""))
             lines.map { it.length }
         }
     }

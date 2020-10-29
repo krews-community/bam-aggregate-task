@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.genomealmanac"
-version = "0.5.1"
+version = "0.5.2"
 val artifactID = "bam-aggregate-task"
 
 repositories {
