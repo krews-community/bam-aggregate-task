@@ -19,9 +19,6 @@ private val log = KotlinLogging.logger {}
  */
 fun barcodeMap(regions: List<Region>, alignments: Path, forwardShift: Int = 0, reverseShift: Int = 0, strand: String? = null): Map<String, Map<String, Int>> {
 
-    val values: List<MutableList<Int>> = regions.map {
-        (it.start..it.end).map { 0 }.toMutableList()
-    }
     val queryExtension = max(abs(forwardShift), abs(reverseShift)) + 1
 
     SamReaderFactory.makeDefault().validationStringency(ValidationStringency.SILENT).enable(SamReaderFactory.Option.INCLUDE_SOURCE_IN_RECORDS).open(alignments.toFile()).use {
@@ -43,7 +40,6 @@ fun barcodeMap(regions: List<Region>, alignments: Path, forwardShift: Int = 0, r
                     }
                     val start = pileUpStart(alignment, forwardShift, reverseShift)
                     if (start >= region.start && start <= region.end) {
-                        val coordinate = if (region.strand == '+') start - region.start else region.end - start
                         val barcode = alignment.getAttribute("CB")?.toString()
                         if (barcode === null) return@forEach
                         if (!results.containsKey(barcode)) results[barcode] = mutableMapOf()
