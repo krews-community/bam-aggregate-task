@@ -33,9 +33,10 @@ class Matrix : CliktCommand() {
         .int().default(0)
     private val reverseShift by option("--reverse-shift", help = "if set, shifts reverse strand reads by the given number of basepairs")
         .int().default(0)
+    private val strand by option("--strand", help = "if set, aggregates reads on the given strand only; may be one of 'forward' or 'reverse'")
 
     override fun run() {
-        runTask(regionFiles, alignments, expansionSize, outputDir, randomAccess, batchSize, forwardShift, reverseShift)
+        runTask(regionFiles, alignments, expansionSize, outputDir, randomAccess, batchSize, forwardShift, reverseShift, strand)
     }
 
 }
@@ -48,7 +49,10 @@ class Matrix : CliktCommand() {
  * @param expansionSize number of basepairs by which to expand each region around its center
  * @param outputDir path to directory for writing output files
  */
-private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, randomAccess: Boolean, batchSize: Int, forwardShift: Int, reverseShift: Int) {
+private fun runTask(
+    regionFiles: List<Path>, alignments: Path, expansionSize: Int, outputDir: Path, randomAccess: Boolean, batchSize: Int, forwardShift: Int, reverseShift: Int,
+    strand: String?
+) {
 
     regionFiles.forEach {
 
@@ -63,7 +67,7 @@ private fun runTask(regionFiles: List<Path>, alignments: Path, expansionSize: In
                 )
             else
                 writeJSONMatrix(
-                    matrix(resizeRegions(regions, expansionSize / 2), alignments, forwardShift, reverseShift),
+                    matrix(resizeRegions(regions, expansionSize / 2), alignments, forwardShift, reverseShift, strand),
                     outputDir.resolve("$combinedOutPrefix$AGGREGATE_TSV_SUFFIX")
                 )
         }

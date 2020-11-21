@@ -47,6 +47,26 @@ class MatrixTests {
     }
 
     @Test
+    fun `Run aggregation on regions with reads on the forward strand only`() {
+        val regions = listOf(
+            Region("chr22", 10602488, 10602489, "", 0, '+'),
+            Region("chr22", 10667451, 10667452, "", 0, '-')
+        )
+        val values = matrix(regions, TEST_BAM_PATH, 0, 0, "forward")
+        assertThat(values).isEqualTo(listOf(listOf(1, 0), listOf(0, 0)))
+    }
+
+    @Test
+    fun `Run aggregation on regions with reads on the reverse strand only`() {
+        val regions = listOf(
+            Region("chr22", 10602488, 10602489, "", 0, '-'),
+            Region("chr22", 10667451, 10667452, "", 0, '+')
+        )
+        val values = matrix(regions, TEST_BAM_PATH, 0, 0, "reverse")
+        assertThat(values).isEqualTo(listOf(listOf(0, 1), listOf(0, 0)))
+    }
+
+    @Test
     fun `Run aggregation and write a random access matrix`() {
         val regions = listOf(
             Region("chr22", 10602488,10602489, "", 0, '-'),
